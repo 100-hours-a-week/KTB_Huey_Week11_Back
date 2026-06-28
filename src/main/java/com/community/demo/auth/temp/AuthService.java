@@ -1,9 +1,11 @@
 package com.community.demo.auth.temp;
 
-import com.community.demo.auth.temp.dto.LoginServiceRequestDto;
-import com.community.demo.auth.temp.dto.LoginServiceResponseDto;
-import com.community.demo.auth.temp.dto.SignupAuthServiceRequestDto;
-import com.community.demo.auth.temp.dto.SignupAuthServiceResponseDto;
+import com.community.demo.auth.temp.dto.service.LoginServiceRequestDto;
+import com.community.demo.auth.temp.dto.service.LoginServiceResponseDto;
+import com.community.demo.auth.temp.dto.service.SignupAuthServiceRequestDto;
+import com.community.demo.auth.temp.dto.service.SignupAuthServiceResponseDto;
+import com.community.demo.auth.temp.dto.service.ModifyPasswordServiceRequestDto;
+import com.community.demo.auth.temp.dto.service.ModifyPasswordServiceResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class AuthService {
     private final AuthRepository authRepository;
 
     public SignupAuthServiceResponseDto signupAuth(SignupAuthServiceRequestDto dto) {
+        Auth auth = new Auth(dto.getUserId(), dto.getEmail(), dto.getPassword());
+        authRepository.save(auth);
         return new SignupAuthServiceResponseDto();
     }
 
@@ -31,5 +35,12 @@ public class AuthService {
         } else {
             return new LoginServiceResponseDto(false);
         }
+    }
+
+    public ModifyPasswordServiceResponseDto modifyPassword(ModifyPasswordServiceRequestDto dto) {
+        Auth auth = authRepository.findById(dto.getUserId()).orElseThrow();
+        auth.modifyPassword(dto.getModifiedPassword());
+        authRepository.save(auth);
+        return new ModifyPasswordServiceResponseDto();
     }
 }

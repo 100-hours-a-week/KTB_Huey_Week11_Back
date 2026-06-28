@@ -1,5 +1,8 @@
 package com.community.demo.posts.dto.service;
 
+import lombok.Getter;
+
+@Getter
 public class GetListByPageServiceRequestDto {
-    public long page;
+    private int page;
 }

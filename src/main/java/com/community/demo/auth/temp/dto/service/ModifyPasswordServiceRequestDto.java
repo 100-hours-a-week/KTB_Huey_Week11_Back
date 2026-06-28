@@ -1,4 +1,4 @@
-package com.community.demo.users.dto.service;
+package com.community.demo.auth.temp.dto.service;
 
 import lombok.Data;
 

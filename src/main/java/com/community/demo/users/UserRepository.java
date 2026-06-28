@@ -1,10 +1,8 @@
 package com.community.demo.users;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository {
-    public void save(User user);
-
-    public User findById(long userId);
+public interface UserRepository extends JpaRepository<User, Long> {
 }
