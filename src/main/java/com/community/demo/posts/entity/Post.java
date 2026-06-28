@@ -1,7 +1,15 @@
 package com.community.demo.posts.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.Getter;
+
+@Entity
+@Getter
 public class Post {
 
+    @Id @GeneratedValue
     private long postId;
     private String title;
     private long userId;
@@ -23,4 +31,9 @@ public class Post {
         this.content = content;
         this.image = image;
     }
+
+    public Post() {
+
+    }
+
 }

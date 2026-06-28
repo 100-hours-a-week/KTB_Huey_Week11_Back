@@ -3,19 +3,26 @@ package com.community.demo.posts;
 import com.community.demo.posts.dto.controller.*;
 import com.community.demo.users.dto.service.DeleteUserServiceRequestDto;
 import com.community.demo.users.dto.service.DeleteUserServiceResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
+
+    private final PostService postService;
 
     @PostMapping
     public CreatePostControllerResponseDto create(CreatePostControllerRequestDto dto) {
+        long userId = 0;
+        postService.createPost(dto.toServiceDto(userId));
         return new CreatePostControllerResponseDto();
     }
 
     @GetMapping
     public ListByPagePostControllerResponseDto listByPage(ListByPagePostControllerRequestDto dto) {
+        postService.getPostListByPage()
         return new ListByPagePostControllerResponseDto();
     }
 
