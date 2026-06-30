@@ -1,5 +1,7 @@
 package com.community.demo.comments;
 
+import com.community.demo.posts.entity.Post;
+import com.community.demo.users.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,26 +14,28 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id @GeneratedValue
     private long id;
-    private long postId;
-    private long userId;
+    private Post post;
+    private User author;
     private LocalDateTime postedTime;
     private String content;
+    private boolean isDeleted;
 
     public Comment() {
     }
 
-    public Comment(long postId, long userId, LocalDateTime postedTime, String content) {
-        this.postId = postId;
-        this.userId = userId;
-        this.postedTime = postedTime;
+    public Comment(Post post, User user, String content) {
+        this.post = post;
+        this.author = user;
+        this.postedTime = LocalDateTime.now();
         this.content = content;
+        this.isDeleted = false;
     }
 
     public void delete() {
-
+        this.isDeleted = true;
     }
 
-    public void modify() {
-
+    public void modify(String content) {
+        this.content = content;
     }
 }

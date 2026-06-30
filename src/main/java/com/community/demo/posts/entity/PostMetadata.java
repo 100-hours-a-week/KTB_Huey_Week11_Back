@@ -10,29 +10,32 @@ import java.time.LocalDateTime;
 @Getter
 public class PostMetadata {
     @Id
-    private long postId;
+    private Post post;
     private LocalDateTime postedTime;
     private long likes;
     private long views;
     private boolean isDeleted;
     private long reported;
     private boolean isBlinded;
+    private boolean isEdited;
 
     public void delete() {
         this.isDeleted = true;
     }
 
-    public PostMetadata() {
+    protected PostMetadata() {
 
     }
 
-    public PostMetadata(long postId, LocalDateTime postedTime) {
-        this.postId = postId;
-        this.postedTime = postedTime;
-        this.likes = 0;
-        this.views = 0;
+    public PostMetadata(Post post) {
+        this.post = post;
+        this.postedTime = LocalDateTime.now();
+        this.likes = 0L;
+        this.views = 0L;
         this.isDeleted = false;
-        this.isBlinded = true;
+        this.reported = 0L;
+        this.isBlinded = false;
+        this.isEdited = false;
     }
 
     public void like() {
@@ -41,6 +44,10 @@ public class PostMetadata {
 
     public void view() {
         this.views++;
+    }
+
+    public void update() {
+        this.isEdited = true;
     }
 
     public void report() {

@@ -1,27 +1,28 @@
 package com.community.demo.auth.temp;
 
+import com.community.demo.users.User;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 
 @Entity
-@Getter(value = AccessLevel.PROTECTED)
+@Getter
 public class Auth {
-    private long userId;
+    private User user;
     private String email;
     private String password;
 
-    public Auth() {
+    protected Auth() {
     }
 
-    public Auth(long userId, String email, String password) {
-        this.userId = userId;
+    public Auth(User user, String email, String password) {
+        this.user = user;
         this.email = email;
         this.password = password;
     }
 
-    public void modifyPassword(String modifiedPassword) {
-        this.password = modifiedPassword;
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 
 }

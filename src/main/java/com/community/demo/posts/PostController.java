@@ -1,10 +1,13 @@
 package com.community.demo.posts;
 
-import com.community.demo.posts.dto.controller.*;
-import com.community.demo.users.dto.service.DeleteUserServiceRequestDto;
-import com.community.demo.users.dto.service.DeleteUserServiceResponseDto;
+import com.community.demo.ApiResponse;
+import com.community.demo.posts.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/posts")
@@ -14,35 +17,68 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public CreatePostControllerResponseDto create(CreatePostControllerRequestDto dto) {
+    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(PostRequestDto request) throws URISyntaxException {
+        //
         long userId = 0;
-        postService.createPost(dto.toServiceDto(userId));
-        return new CreatePostControllerResponseDto();
+        //
+        PostResponseDto response = postService.createPost(userId, request);
+
+        return ResponseEntity
+                .created(new URI("/posts/" + response.getPostId()))
+                .body(ApiResponse.of("post_success", response));
     }
 
     @GetMapping
-    public ListByPagePostControllerResponseDto listByPage(ListByPagePostControllerRequestDto dto) {
-        postService.getPostListByPage()
-        return new ListByPagePostControllerResponseDto();
+    public ResponseEntity<ApiResponse<ReadPostsByPageResponseDto>> readPostsByPage(@RequestParam int page) {
+        ReadPostsByPageResponseDto response = postService.readPostsByPage(page);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("posts_view_success", response));
     }
 
-    @GetMapping("/{post_id}")
-    public ReadPostControllerResponseDto read(ReadPostControllerRequestDto dto) {
-        return new ReadPostControllerResponseDto();
+    @GetMapping
+    public ResponseEntity<ApiResponse<ReadPostResponseDto>> readPost(@RequestParam Long postId) {
+        ReadPostResponseDto response = postService.readPost(postId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("post_view_success", response));
     }
 
-    @PostMapping("/{post_id}")
-    public UpdatePostControllerResponseDto update(UpdatePostControllerRequestDto dto) {
-        return new UpdatePostControllerResponseDto();
+    @PatchMapping("/{postId}")
+    public ResponseEntity<ApiResponse<Void>> updatePost(@PathVariable Long postId, UpdatePostRequestDto request) {
+        postService.updatePost(postId, request);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("post_update_success", null));
     }
 
-    @PatchMapping("/{post_id}")
-    public LikePostControllerResponseDto like(LikePostControllerRequestDto dto) {
-        return new LikePostControllerResponseDto();
+    @PatchMapping("/{postId}/likes")
+    public ResponseEntity<ApiResponse<Void>> like(@PathVariable Long postId) {
+        postService.likePost(postId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("post_like_success", null));
     }
 
-    @DeleteMapping("/{post_id}")
-    public DeleteUserServiceResponseDto delete(DeleteUserServiceRequestDto dto) {
-        return new DeleteUserServiceResponseDto();
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long postId) {
+        postService.deletePost(postId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("post_delete_success", null));
+    }
+
+    @PatchMapping("/{postId}/reports")
+    public ResponseEntity<ApiResponse<Void>> report(@PathVariable Long postId) {
+        postService.repostPost(postId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("post_report_success", null));
     }
 }

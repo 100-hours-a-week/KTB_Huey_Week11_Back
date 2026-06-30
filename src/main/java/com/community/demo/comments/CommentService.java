@@ -1,14 +1,15 @@
 package com.community.demo.comments;
 
-import com.community.demo.comments.dto.CommentDto;
-import com.community.demo.comments.dto.service.*;
+import com.community.demo.comments.dto.*;
+import com.community.demo.exception.NotFoundException;
+import com.community.demo.posts.PostRepository;
+import com.community.demo.posts.entity.Post;
 import com.community.demo.users.User;
 import com.community.demo.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,35 +18,45 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public GetCommentsListServiceResponseDto getCommentsList(GetCommentsListServiceRequestDto dto) {
-        List<Comment> comments = commentRepository.findAllByPostId(dto.getPostId());
-        List<CommentDto> commentDtos = new ArrayList<>();
-        for (Comment comment: comments) {
-            User user = userRepository.findById(comment.getUserId()).orElseThrow();
-            commentDtos.add(CommentDto.fromEntity(comment, user.getNickname()));
-        }
-        return new GetCommentsListServiceResponseDto(commentDtos);
+    @Transactional(readOnly = true)
+    public List<ReadCommentResponseDto> readAllComments(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
+        List<Comment> comments = commentRepository.findAllByPost(post);
+        List<ReadCommentResponseDto> dtos = comments.stream().map(ReadCommentResponseDto::fromEntity).toList();
+        return dtos;
     }
 
-    public ModifyCommentServiceResponseDto modifyComment(ModifyCommentServiceRequestDto dto) {
-        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow();
-        comment.modify();
+    @Transactional
+    public UpdateCommentResponseDto updateComment(Long postId, Long commentId, UpdateCommentRequestDto request) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
+        Comment comment = commentRepository.findByIdAndPost(commentId, post).orElseThrow();
+
+        comment.modify(request.getContent());
         commentRepository.save(comment);
-        return new ModifyCommentServiceResponseDto();
+
+        return UpdateCommentResponseDto.fromEntity(comment);
     }
 
-    public CreateCommentServiceResponseDto createComment(CreateCommentServiceRequestDto dto) {
-        Comment comment = new Comment(dto.getPostId(), dto.getUserId(), LocalDateTime.now(), dto.getContent());
+    @Transactional
+    public CommentResponseDto createComment(Long postId, Long userId, CommentRequestDto request) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
+        User author = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("not_found"));
+
+        Comment comment = new Comment(post, author, request.getContent());
         commentRepository.save(comment);
-        return new CreateCommentServiceResponseDto();
+
+        return CommentResponseDto.fromEntity(comment);
     }
 
-    public DeleteCommentServiceResponseDto deleteComment(DeleteCommentServiceRequestDto dto) {
-        Comment comment = commentRepository.findById(dto.getCommentId()).orElseThrow();
+    @Transactional
+    public void deleteComment(Long postId, Long commentId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
+        Comment comment = commentRepository.findByIdAndPost(commentId, post).orElseThrow();
+
         comment.delete();
         commentRepository.save(comment);
-        return new DeleteCommentServiceResponseDto();
     }
 
 }

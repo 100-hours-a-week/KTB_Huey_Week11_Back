@@ -1,22 +1,60 @@
 package com.community.demo.users;
 
-import com.community.demo.users.dto.controller.ModifyNicknameUserControllerRequestDto;
-import com.community.demo.users.dto.controller.ModifyNicknameUserControllerResponseDto;
-import com.community.demo.users.dto.service.DeleteUserServiceRequestDto;
-import com.community.demo.users.dto.service.DeleteUserServiceResponseDto;
+import com.community.demo.ApiResponse;
+import com.community.demo.users.dto.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users/{user_id}")
+@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @PatchMapping("/nickname")
-    public ModifyNicknameUserControllerResponseDto modifyNickname(ModifyNicknameUserControllerRequestDto dto) {
-        return new ModifyNicknameUserControllerResponseDto();
+    private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<ReadUserResponseDto>> readUser(@RequestParam Long userId) {
+        ReadUserResponseDto response = userService.readUser(userId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("user_read_success", response));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserResponseDto>> createUser(UserRequestDto request) {
+        UserResponseDto response = userService.createUser(request);
+
+        return ResponseEntity
+                .created(null)
+                .body(ApiResponse.of("user_create_success", response));
+    }
+
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<ApiResponse<Void>> updatePassword(@PathVariable Long userId, UpdatePasswordRequestDto request) {
+        userService.updatePassword(userId, request);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("user_password_update_success", null));
+    }
+
+    @PatchMapping("/{userId}/nickname")
+    public ResponseEntity<ApiResponse<Void>> updateNickname(@PathVariable Long userId, UpdateNicknameRequestDto request) {
+        userService.updateNickname(userId, request);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("user_nickname_update_success", null));
     }
 
     @DeleteMapping
-    public DeleteUserServiceResponseDto signout(DeleteUserServiceRequestDto dto) {
-        return new DeleteUserServiceResponseDto();
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@RequestParam Long userId) {
+        userService.deleteUser(userId);
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("user_delete_success", null));
     }
 }
