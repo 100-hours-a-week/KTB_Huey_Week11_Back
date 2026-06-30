@@ -1,23 +1,26 @@
 package com.community.demo.users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.community.demo.files.File;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
 public class User {
     @Id @GeneratedValue
+    @Column(name = "user_id")
     private long id;
     private String nickname;
-    private String profileImage;
     private boolean is_deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id")
+    private File profileImage;
 
     public User() {
     }
 
-    public User(String nickname, String profileImage) {
+    public User(String nickname, File profileImage) {
         this.nickname = nickname;
         this.profileImage = profileImage;
         is_deleted = false;
@@ -29,5 +32,9 @@ public class User {
 
     public void signout() {
         is_deleted = true;
+    }
+
+    public void updateProfileImage(File profileImage) {
+        this.profileImage = profileImage;
     }
 }
