@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 public class UpdatePostRequestDto {
     private final String title;
     private final String content;
-    private final String image;
+    private final String imageUrl;
 }

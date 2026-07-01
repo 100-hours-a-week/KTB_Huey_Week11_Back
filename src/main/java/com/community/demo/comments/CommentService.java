@@ -2,6 +2,7 @@ package com.community.demo.comments;
 
 import com.community.demo.comments.dto.*;
 import com.community.demo.exception.NotFoundException;
+import com.community.demo.auth.temp.AuthorizedOnly;
 import com.community.demo.posts.PostRepository;
 import com.community.demo.posts.entity.Post;
 import com.community.demo.users.User;
@@ -29,14 +30,12 @@ public class CommentService {
     }
 
     @Transactional
-    public UpdateCommentResponseDto updateComment(Long postId, Long commentId, UpdateCommentRequestDto request) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
-        Comment comment = commentRepository.findByIdAndPost(commentId, post).orElseThrow();
+    public UpdateCommentResponseDto updateComment(Long commentId, UpdateCommentRequestDto request) {
+        Comment comment = getComment(commentId);
 
-        comment.modify(request.getContent());
-        commentRepository.save(comment);
+        Comment updatedComment = updateComment(comment, request);
 
-        return UpdateCommentResponseDto.fromEntity(comment);
+        return UpdateCommentResponseDto.fromEntity(updatedComment);
     }
 
     @Transactional
@@ -51,12 +50,25 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long postId, Long commentId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
-        Comment comment = commentRepository.findByIdAndPost(commentId, post).orElseThrow();
+    public void deleteComment(Long commentId) {
+        Comment comment = getComment(commentId);
 
+        deleteComment(comment);
+    }
+
+    private Comment getComment(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("comment_not_found"));
+    }
+
+    @AuthorizedOnly
+    private Comment updateComment(Comment comment, UpdateCommentRequestDto request) {
+        comment.modify(request.getContent());
+        return commentRepository.save(comment);
+    }
+
+    @AuthorizedOnly
+    private void deleteComment(Comment comment) {
         comment.delete();
         commentRepository.save(comment);
     }
-
 }

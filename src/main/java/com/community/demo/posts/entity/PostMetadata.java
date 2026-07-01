@@ -1,7 +1,6 @@
 package com.community.demo.posts.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -10,6 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 public class PostMetadata {
     @Id
+    private Long id;
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "post_id")
     private Post post;
     private LocalDateTime postedTime;
     private long likes;

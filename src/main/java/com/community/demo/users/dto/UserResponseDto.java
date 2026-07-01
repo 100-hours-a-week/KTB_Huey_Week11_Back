@@ -1,15 +1,18 @@
 package com.community.demo.users.dto;
 
 import com.community.demo.users.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class UserResponseDto {
-    private final long userId;
+    private Long userId;
 
-    public static UserResponseDto fromEntity(User user) {
-        return new UserResponseDto(user.getId());
+    public static UserResponseDto of(Long userId) {
+        return new UserResponseDto(userId);
     }
 }

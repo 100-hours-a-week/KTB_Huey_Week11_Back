@@ -10,6 +10,6 @@ public class PostResponseDto {
     private final Long postId;
 
     public static PostResponseDto fromEntity(Post post) {
-        return new PostResponseDto(post.getPostId());
+        return new PostResponseDto(post.getId());
     }
 }

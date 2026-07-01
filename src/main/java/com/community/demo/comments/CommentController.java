@@ -1,8 +1,8 @@
 package com.community.demo.comments;
 
 import com.community.demo.ApiResponse;
+import com.community.demo.auth.Login;
 import com.community.demo.comments.dto.*;
-import com.community.demo.comments.dto.controller.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +17,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long postId, CommentRequestDto request) {
-        Long userId = 0L;
+    public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long postId, @Login Long userId, CommentRequestDto request) {
 
         CommentResponseDto response = commentService.createComment(postId, userId, request);
 
@@ -37,17 +36,17 @@ public class CommentController {
     }
 
     @PatchMapping
-    public ResponseEntity<ApiResponse<UpdateCommentResponseDto>> updateComment(@PathVariable Long postId, @RequestParam Long commentId, UpdateCommentRequestDto request) {
-        commentService.updateComment(postId, commentId, request);
+    public ResponseEntity<ApiResponse<UpdateCommentResponseDto>> updateComment(@RequestParam Long commentId, UpdateCommentRequestDto request) {
+        UpdateCommentResponseDto response = commentService.updateComment(commentId, request);
 
         return ResponseEntity
                 .ok()
-                .body(ApiResponse.of("comment_modify_success", null));
+                .body(ApiResponse.of("comment_modify_success", response));
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Long postId, @RequestParam Long commentId) {
-        commentService.deleteComment(postId, commentId);
+    public ResponseEntity<ApiResponse<Void>> deleteComment(@RequestParam Long commentId) {
+        commentService.deleteComment(commentId);
 
         return ResponseEntity
                 .ok()

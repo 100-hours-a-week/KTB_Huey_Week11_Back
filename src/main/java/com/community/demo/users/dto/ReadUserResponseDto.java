@@ -2,17 +2,21 @@ package com.community.demo.users.dto;
 
 import com.community.demo.auth.temp.Auth;
 import com.community.demo.users.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@RequiredArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReadUserResponseDto {
-    private final String email;
-    private final String nickname;
-    private final String image;
+    private String email;
+    private String nickname;
+    private String imageUrl;
 
-    public static ReadUserResponseDto fromEntity(User user, Auth auth) {
-        return new ReadUserResponseDto(auth.getEmail(), user.getNickname(), user.getProfileImage());
+    public static ReadUserResponseDto fromEntity(User user) {
+        return new ReadUserResponseDto(user.getEmail(), user.getNickname(), user.getProfileImage().getFilePath());
     }
 }

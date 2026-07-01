@@ -6,24 +6,34 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Table(name = "\"user\"")
 public class User {
     @Id @GeneratedValue
     @Column(name = "user_id")
-    private long id;
+    private Long id;
     private String nickname;
-    private boolean is_deleted;
+    private boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File profileImage;
 
-    public User() {
+    private String email;
+    private String password;
+
+    protected User() {
     }
 
-    public User(String nickname, File profileImage) {
+    public User(String nickname, File profileImage, String email, String password) {
         this.nickname = nickname;
         this.profileImage = profileImage;
-        is_deleted = false;
+        isDeleted = false;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 
     public void updateNickname(String newNickname) {
@@ -31,7 +41,7 @@ public class User {
     }
 
     public void signout() {
-        is_deleted = true;
+        isDeleted = true;
     }
 
     public void updateProfileImage(File profileImage) {
