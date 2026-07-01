@@ -1,6 +1,7 @@
 package com.community.demo.posts;
 
 import com.community.demo.ApiResponse;
+import com.community.demo.auth.Login;
 import com.community.demo.posts.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(PostRequestDto request) throws URISyntaxException {
-        //
-        long userId = 0;
-        //
+    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(@Login Long userId, PostRequestDto request) throws URISyntaxException {
         PostResponseDto response = postService.createPost(userId, request);
 
         return ResponseEntity
@@ -29,7 +27,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<ReadPostsByPageResponseDto>> readPostsByPage(@RequestParam int page) {
+    public ResponseEntity<ApiResponse<ReadPostsByPageResponseDto>> readPostsByPage(@RequestParam Long page) {
         ReadPostsByPageResponseDto response = postService.readPostsByPage(page);
 
         return ResponseEntity
@@ -75,7 +73,7 @@ public class PostController {
 
     @PatchMapping("/{postId}/reports")
     public ResponseEntity<ApiResponse<Void>> report(@PathVariable Long postId) {
-        postService.repostPost(postId);
+        postService.reportPost(postId);
 
         return ResponseEntity
                 .ok()

@@ -9,7 +9,7 @@ import lombok.Getter;
 public class User {
     @Id @GeneratedValue
     @Column(name = "user_id")
-    private long id;
+    private Long id;
     private String nickname;
     private boolean is_deleted;
 
@@ -17,7 +17,7 @@ public class User {
     @JoinColumn(name = "file_id")
     private File profileImage;
 
-    public User() {
+    protected User() {
     }
 
     public User(String nickname, File profileImage) {

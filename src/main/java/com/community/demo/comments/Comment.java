@@ -2,9 +2,7 @@ package com.community.demo.comments;
 
 import com.community.demo.posts.entity.Post;
 import com.community.demo.users.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -13,9 +11,17 @@ import java.time.LocalDateTime;
 @Getter
 public class Comment {
     @Id @GeneratedValue
-    private long id;
+    @Column(name = "comment_id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User author;
+
     private LocalDateTime postedTime;
     private String content;
     private boolean isDeleted;
@@ -29,6 +35,7 @@ public class Comment {
         this.postedTime = LocalDateTime.now();
         this.content = content;
         this.isDeleted = false;
+        post.getComments().add(this);
     }
 
     public void delete() {

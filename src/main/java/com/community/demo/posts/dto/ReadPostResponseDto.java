@@ -2,32 +2,35 @@ package com.community.demo.posts.dto;
 
 import com.community.demo.posts.entity.Post;
 import com.community.demo.posts.entity.PostMetadata;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class ReadPostResponseDto {
 
-    private final String title;
-    private final String userNickname;
-    private final LocalDateTime postedTime;
-    private final String content;
-    private final String image;
-    private final Long likes;
-    private final Long views;
-    private final Long comments;
-    private final boolean edited;
+    private String title;
+    private String userNickname;
+    private String userProfileImageUrl;
+    private LocalDateTime postedTime;
+    private String content;
+    private String imageUrl;
+    private Long likes;
+    private Long views;
+    private Long comments;
+    private Boolean edited;
 
     public static ReadPostResponseDto fromEntity(Post post, PostMetadata postMetadata, long count) {
         return new ReadPostResponseDto(
                 post.getTitle(),
                 post.getAuthor().getNickname(),
+                post.getAuthor().getProfileImage().getFilePath(),
                 postMetadata.getPostedTime(),
                 post.getContent(),
-                post.getImage(),
+                post.getPostAttachment().getFilePath(),
                 postMetadata.getLikes(),
                 postMetadata.getViews(),
                 count,

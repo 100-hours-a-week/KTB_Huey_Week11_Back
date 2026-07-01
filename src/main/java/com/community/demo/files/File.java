@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class File {
     @Id @GeneratedValue
+    @Column(name = "file_id")
     private Long id;
     private String filePath = "/public/images/default.jpg";
 
@@ -26,5 +27,9 @@ public class File {
 
     public static File createProfileImage(String filePath, Long uploaderId) {
         return new File(filePath, FileCategory.PROFILE_IMAGE, uploaderId);
+    }
+
+    public static File createPostAttachment(String filePath, Long uploaderId) {
+        return new File(filePath, FileCategory.POST_ATTACHMENT, uploaderId);
     }
 }
