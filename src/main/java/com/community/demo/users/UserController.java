@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(UserRequestDto request) {
-        log.info("createUser");
         UserResponseDto response = userService.createUser(request);
 
         return ResponseEntity
