@@ -1,0 +1,17 @@
+footer {
+    display: flex;
+    align-items: center;
+}
+
+#stats {
+    display: flex;
+}
+
+.stat {
+    font-weight: bold;
+}
+
+.info {
+    display: flex;
+}
+
