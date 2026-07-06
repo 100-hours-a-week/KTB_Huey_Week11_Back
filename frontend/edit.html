@@ -6,6 +6,8 @@
         <meta charset="UTF-8">
         <title>edit post</title>
         <link href="basic.css" rel="stylesheet">
+        <script src="edit.js"></script>
+        <script src="files.js"></script>
     </head>
     <body>
         <article>
@@ -13,26 +15,33 @@
                 <h1>게시글 수정</h1>
             </header>
 
-            <form>
+            <form id="edit-form">
                 <div>
                     <label>제목*</label>
-                    <input type="text"/>
+                    <input type="text" name="title" id="title"/>
                 </div>
                 <div>
                     <label>내용*</label>
-                    <input type="text"/>
+                    <input type="text" name="content" id="content"/>
                     <small>* helper text</small>
                 </div>
                 <div>
-                    <label>이미지</label>
-                    <input type="file" />
-                </div>
-                <div>
-                    <div>
-                        <input type="submit" value="수정하기" />
-                    </div>                  
+                    <input type="hidden" name="imageUrl" id="imageUrl"/>
                 </div>
             </form>
+
+            <form id="attach">
+                <div>
+                    <label>이미지</label>
+                    <input type="file" name="image" id="image"/>
+                </div>
+            </form>
+
+            <div>
+                <div>
+                    <button type="submit" form="edit-form" value="수정하기"></button>
+                </div>                  
+            </div>
         </article>
     </body>
 </html>

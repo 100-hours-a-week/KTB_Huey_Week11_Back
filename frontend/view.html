@@ -7,6 +7,7 @@
         <title>post</title>
         <link href="view.css" rel="stylesheet">
         <link href="basic.css" rel="stylesheet">
+        <script src="view.js" defer></script>
     </head>
     <body>
         <article>
@@ -39,7 +40,7 @@
                     <footer class="vert gather">
                         <div class="vert center">
                             <div>
-                                <button class="stat">
+                                <button class="stat" id="like">
                                     123
                                     <br>
                                     좋아요 수
@@ -67,7 +68,7 @@
 
             </div>
             <section>
-                <form>
+                <form id="comment-form">
                     <div>
                         <input type="text" placeholder="댓글을 남겨주세요!"/>
                     </div>

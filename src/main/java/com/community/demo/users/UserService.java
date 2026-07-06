@@ -2,6 +2,7 @@ package com.community.demo.users;
 
 import com.community.demo.auth.temp.Auth;
 import com.community.demo.auth.temp.dto.LoginRequestDto;
+import com.community.demo.auth.temp.dto.LoginResponseDto;
 import com.community.demo.exception.BadRequestException;
 import com.community.demo.exception.NotFoundException;
 import com.community.demo.files.File;
@@ -61,7 +62,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequestDto request, HttpServletRequest httpRequest) {
+    public LoginResponseDto login(LoginRequestDto request, HttpServletRequest httpRequest) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new NotFoundException("user_not_found"));
 
         if (!request.getPassword().equals(user.getPassword())) {
@@ -74,6 +75,8 @@ public class UserService {
         //세션에 userId 주입
         session.setAttribute("userId", user.getId());
         session.setMaxInactiveInterval(1800);
+
+        return LoginResponseDto.of(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImage().getFilePath());
     }
 
     public void logout() {

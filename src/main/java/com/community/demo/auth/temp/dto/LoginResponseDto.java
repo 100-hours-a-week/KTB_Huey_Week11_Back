@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public class LoginResponseDto {
 
-    private String userId;
+    private Long userId;
     private String email;
     private String nickname;
     private String profileImage;
 
-    public static LoginResponseDto of(String userId, String email, String nickname, String profileImage) {
+    public static LoginResponseDto of(Long userId, String email, String nickname, String profileImage) {
         return new LoginResponseDto(userId, email, nickname, profileImage);
     }
 }

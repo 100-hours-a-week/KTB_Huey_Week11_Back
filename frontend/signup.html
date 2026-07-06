@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <!-- 회원가입 페이지 -->
 
+<!-- UserRequestDto: email, password, nickname, profileImageUrl -->
+<!-- UserResponseDto: userId -->
+
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
         <title>Sign in</title>
         <link href="basic.css" rel="stylesheet">
+        <script src="signup.js" defer></script>
+        <script src="profile.js" defer></script>
     </head>
     <body>
         <article>
@@ -13,20 +18,31 @@
                 <h1>회원가입</h1>
             </header>
 
-            <form>
+            <div>
+            <form id="profile-image">
                 <div>
                     <label>프로필 사진</label>
                     <small>* helper text</small>
-                    <input type="image" />
                 </div>
+
+                <div>
+                    <label for="image">
+                        <img id="preview" src="images.png">
+                    </label>
+
+                    <input type="file" id="image" accept="image/*" name="profileImage">
+                </div>
+            </form>
+        
+            <form id="signup-form">
                 <div>
                     <label>이메일*</label>
-                    <input type="text" placeholder="이메일을 입력하세요"/>
+                    <input type="text" name="email" id="email" placeholder="이메일을 입력하세요"/>
                     <small>* helper text</small>
                 </div>
                 <div>
                     <label>비밀번호*</label>
-                    <input type="text" placeholder="비밀번호를 입력하세요"/>
+                    <input type="text" name="password" id="password" placeholder="비밀번호를 입력하세요"/>
                     <small>* helper text</small>
                 </div>
                 <div>
@@ -36,8 +52,11 @@
                 </div>
                 <div>
                     <label>닉네임*</label>
-                    <input type="text" placeholder="닉네임을 입력하세요"/>
+                    <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력하세요"/>
                     <small>* helper text</small>
+                </div>
+                <div>
+                    <input name="profileImageUrl" id="imageUrl" />
                 </div>
                 <div>
                     <div>
@@ -45,6 +64,7 @@
                     </div>
                 </div>
             </form>
+            </div>
 
             <button>로그인하러 가기</button>
         </article>

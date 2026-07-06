@@ -31,8 +31,8 @@ public class FileController {
                 ));
     }
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse<Void>> uploadPostImage(
+    @PostMapping("/public/attachments")
+    public ResponseEntity<ApiResponse<FileUploadResponseDto>> uploadPostImage(
             @Login Long userId,
             @RequestPart("image") MultipartFile file
     ) throws FileUploadException {
@@ -42,7 +42,7 @@ public class FileController {
                 .created(null)
                 .body(ApiResponse.of(
                         "post_attachment_uploaded",
-                        null
+                        FileUploadResponseDto.from(savedFile)
                 ));
     }
 }

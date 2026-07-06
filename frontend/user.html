@@ -6,6 +6,8 @@
         <meta charset="UTF-8">
         <title>edit profile</title>
         <link href="basic.css" rel="stylesheet">
+        <script src="user.js" defer></script>
+        <script src="profile.js" defer></script>
     </head>
     <body>
         <article>
@@ -13,19 +15,25 @@
                 <h1>회원정보수정</h1>
             </header>
 
-            <form>
+            <form id="profile-image">
                 <div>
                     <label>프로필 사진*</label>
-                    <input type="image"/>
+                    <input type="image" name="image" id="image"/>
                 </div>
+            </form>
+
+            <form id="user-form">
                 <div>
                     <label>이메일</label>
-                    <p>startupcode@gmail.com</p>
+                    <p id="email">startupcode@gmail.com</p>
                 </div>
                 <div>
                     <label>닉네임</label>
-                    <input type="text" />
+                    <input type="text" name="nickname" id="nickname"/>
                     <small>* helper text</small>
+                </div>
+                <div>
+                    <input type="hidden" name="profileImageUrl" id="imageUrl" />
                 </div>
                 <div>
                     <div>

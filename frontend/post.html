@@ -6,6 +6,8 @@
         <meta charset="UTF-8">
         <title>make post</title>
         <link href="basic.css" rel="stylesheet">
+        <script src="post.js" defer></script>
+        <script src="attach.js" defer></script>
     </head>
     <body>
         <article>
@@ -13,26 +15,33 @@
                 <h1>게시글 작성</h1>
             </header>
 
-            <form>
+            <form id="post-form">
                 <div>
                     <label>제목*</label>
-                    <input type="text" placeholder="제목을 입력해주세요. (최대 26글자)"/>
+                    <input type="text" name="title" id="title" placeholder="제목을 입력해주세요. (최대 26글자)"/>
                 </div>
                 <div>
                     <label>내용*</label>
-                    <input type="text" placeholder="내용을 입력해주세요."/>
+                    <input type="text" name="content" id="content" placeholder="내용을 입력해주세요."/>
                     <small>* helper text</small>
                 </div>
-                <div>
-                    <label>이미지</label>
-                    <input type="file"/>
-                </div>
-                <div>
-                    <div>
-                        <input type="submit" value="완료" />
-                    </div>
+                 <div>
+                    <input type="hidden" name="imageUrl" id="imageUrl" value="null"/>
                 </div>
             </form>
+
+            <form id="attach">
+                <div>
+                    <label>이미지</label>
+                    <input type="file" name="image" id="image"/>
+                </div>
+            </form>
+
+            <div>
+                <div>
+                    <input type="submit" form="post-form" value="완료" />
+                </div>                
+            </div>
         </article>
     </body>
 </html>
