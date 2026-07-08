@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
+@Table(name = "post_metadata")
 public class PostMetadata {
-    @Id
-    private Long id;
-    @OneToOne
+    @Id @Column(name = "post_id")
+    private java.lang.Long id;
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "post_id")
     private Post post;
@@ -56,7 +58,7 @@ public class PostMetadata {
     public void report() {
         this.reported++;
         if (reported >= 5) {
-            isBlinded = false;
+            isBlinded = true;
         }
     }
 }

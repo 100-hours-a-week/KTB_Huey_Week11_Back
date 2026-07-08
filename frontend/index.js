@@ -6,14 +6,19 @@ let page = 0;
 async function loadPage(page) {
     const response = await fetch(`http://localhost:8080/posts?page=${page}`, {
         method: "GET",
+        credentials: "include",
     });
 
     if (response.ok) {
-        const json = response.json();
+        const json = await response.json();
+        const data = json.data;
         const posts = document.getElementById("posts");
-        json.data().array.forEach(element => {
-            posts.innerHTML = renderPost(element);
-        });
+        for (post of data.posts) {
+            const card = document.createElement("div");
+            card.id = "post_" + post.postId;
+            card.innerHTML = renderPost(post);
+            posts.appendChild(card);
+        }
     } else {
 
     }
@@ -21,20 +26,38 @@ async function loadPage(page) {
 
 document.addEventListener("DOMContentLoaded", loadPage(page));
 
-//추가 구현 필요
-document.addEventListener("스크롤이 밑에 닿을 때", (event) => {
-    page++;
-    loadPage(page);
-})
+window.addEventListener("scroll", () => {
+    const threshold = 100;
+
+    if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - threshold
+    ) {
+        page++;
+        loadPage(page);
+    }
+});
+
+function format(number) {
+    if (number >= 1000) {
+        return (number / 1000) + "k";
+    } else {
+        return number;
+    }
+}
+
+function parseImageUrl(url) {
+    return "http://localhost:8080" + url;
+}
 
 function renderPost(post) {
     return `
-    <div>
-        <button>
+    <div id=${post.postId}>
+        <a href="view.html?postId=${post.postId}">
             <div>
                 <header>
                     <div class="post-title">
-                        <h2>${post.title}</h2>
+                        <h2>${post.title.substr(0, 26)}</h2>
                     </div>
                     <div class="vert between">
                         <div class="vert">
@@ -49,11 +72,11 @@ function renderPost(post) {
                 </header>
 
                 <footer class="vert">
-                    <img>
-                    <p>${post.author}</p>
+                    <img class="user-profile-small" src=${parseImageUrl(post.userProfileImageUrl)}>
+                    <p>${post.userNickname}</p>
                 </footer>
             </div>
-        </button>
+        </a >
     </div>
     `;
 }

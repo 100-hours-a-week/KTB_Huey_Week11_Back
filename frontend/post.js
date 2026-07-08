@@ -10,12 +10,14 @@ postForm.addEventListener("submit", async (event) => {
     const response = await fetch("http://localhost:8080/posts", {
         method: "POST",
         body: formData,
+        credentials: "include",
     })
 
     if (response.ok) {
         const json = await response.json();
         console.log(json.data);
-    } else {
-
+        window.location = "view.html?postId=" + json.data.postId;
+    } else if (response.status === 401) {
+        window.location = "login.html";
     }
 })

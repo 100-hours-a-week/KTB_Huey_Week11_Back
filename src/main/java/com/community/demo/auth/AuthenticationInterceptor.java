@@ -1,5 +1,7 @@
 package com.community.demo.auth;
 
+import com.community.demo.exception.BadRequestException;
+import com.community.demo.exception.UnauthorizedException;
 import com.community.demo.users.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -18,15 +22,22 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        log.info("interceptor");
+        log.info("requested URI: " + request.getRequestURI());
+        HttpSession session = Optional.ofNullable(request.getSession(false)).orElseThrow(() -> {
+            log.info("unauthorized in login interceptor");
+            return new UnauthorizedException("unauthorized");
+        });
 
-        HttpSession session = request.getSession(false);
+        log.info("user: " + (session.getAttribute("loginUser")));
 
-        if (session == null || session.getAttribute("loginMember") == null) {
-            return false;
+        if (session.getAttribute("loginUser") == null) {
+            log.info("unauthorized");
+            throw new UnauthorizedException("need-login");
         }
 
         Long userId = (Long) session.getAttribute("userId");
 
-        return authService.authenticate(userId) && HandlerInterceptor.super.preHandle(request, response, handler);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

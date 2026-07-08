@@ -31,7 +31,7 @@ public class Authorizer {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         HttpSession session = request.getSession(false);
-        Long userId = (Long) session.getAttribute("userId");
+        java.lang.Long userId = (java.lang.Long) session.getAttribute("userId");
 
         if (userId != authorId) {
             throw new UnauthorizedException("unauthorized");

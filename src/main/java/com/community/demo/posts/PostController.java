@@ -4,12 +4,14 @@ import com.community.demo.ApiResponse;
 import com.community.demo.auth.Login;
 import com.community.demo.posts.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Slf4j
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
@@ -19,6 +21,9 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PostResponseDto>> createPost(@Login Long userId, PostRequestDto request) throws URISyntaxException {
+        log.info("PostController");
+        log.info("userId: " + userId);
+        log.info("imageUrl: " + request.getImageUrl());
         PostResponseDto response = postService.createPost(userId, request);
 
         return ResponseEntity

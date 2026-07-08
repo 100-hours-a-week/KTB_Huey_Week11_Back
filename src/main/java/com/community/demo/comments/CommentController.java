@@ -4,11 +4,13 @@ import com.community.demo.ApiResponse;
 import com.community.demo.auth.Login;
 import com.community.demo.comments.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/posts/{postId}/comments")
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class CommentController {
 
     @PatchMapping
     public ResponseEntity<ApiResponse<UpdateCommentResponseDto>> updateComment(@RequestParam Long commentId, UpdateCommentRequestDto request) {
+        log.info(request.getContent());
         UpdateCommentResponseDto response = commentService.updateComment(commentId, request);
 
         return ResponseEntity

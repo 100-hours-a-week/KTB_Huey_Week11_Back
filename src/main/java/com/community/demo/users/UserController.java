@@ -1,6 +1,7 @@
 package com.community.demo.users;
 
 import com.community.demo.ApiResponse;
+import com.community.demo.auth.Login;
 import com.community.demo.users.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<ReadUserResponseDto>> readUser(Long userId) {
+    public ResponseEntity<ApiResponse<ReadUserResponseDto>> readUser(@Login Long userId) {
         ReadUserResponseDto response = userService.readUser(userId);
 
         return ResponseEntity
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<ApiResponse<Void>> updateUser(Long userId, UpdateUserRequestDto request) {
+    public ResponseEntity<ApiResponse<Void>> updateUser(@Login Long userId, UpdateUserRequestDto request) {
         userService.updateUser(userId, request);
 
         return ResponseEntity
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PatchMapping("/me/password")
-    public ResponseEntity<ApiResponse<Void>> updatePassword(Long userId, UpdatePasswordRequestDto request) {
+    public ResponseEntity<ApiResponse<Void>> updatePassword(@Login Long userId, UpdatePasswordRequestDto request) {
         userService.updatePassword(userId, request);
 
         return ResponseEntity
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(Long userId) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@Login Long userId) {
         userService.deleteUser(userId);
 
         return ResponseEntity

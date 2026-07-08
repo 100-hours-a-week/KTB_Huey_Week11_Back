@@ -39,7 +39,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users/login",
                         "/users/me/profile-image",
                         "/public/**"
-                );
+                )
+                .excludeHttpMethods(HttpMethod.OPTIONS);
     }
 
     @Override
@@ -51,7 +52,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("http://127.0.0.1:5500")
-                .allowedMethods("*")
-                .allowedHeaders("*");
+                .allowedMethods("GET", "POST", "OPTIONS", "PATCH", "PUT", "DELETE", "HEAD")
+                .allowedHeaders("Content-Type")
+                .allowCredentials(true);
     }
 }

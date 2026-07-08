@@ -8,11 +8,13 @@ import com.community.demo.posts.entity.Post;
 import com.community.demo.users.User;
 import com.community.demo.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -24,9 +26,8 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<ReadCommentResponseDto> readAllComments(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("not_found"));
-        List<Comment> comments = commentRepository.findAllByPost(post);
-        List<ReadCommentResponseDto> dtos = comments.stream().map(ReadCommentResponseDto::fromEntity).toList();
-        return dtos;
+        List<Comment> comments = commentRepository.findAllByIsDeletedFalseAndPost(post);
+        return comments.stream().map(ReadCommentResponseDto::fromEntity).toList();
     }
 
     @Transactional
@@ -50,18 +51,19 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(java.lang.Long commentId) {
         Comment comment = getComment(commentId);
 
         deleteComment(comment);
     }
 
-    private Comment getComment(Long commentId) {
+    private Comment getComment(java.lang.Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("comment_not_found"));
     }
 
     @AuthorizedOnly
     private Comment updateComment(Comment comment, UpdateCommentRequestDto request) {
+        log.info(request.getContent());
         comment.modify(request.getContent());
         return commentRepository.save(comment);
     }

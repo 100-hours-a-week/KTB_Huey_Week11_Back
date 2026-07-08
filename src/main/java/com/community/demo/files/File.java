@@ -25,11 +25,7 @@ public class File {
         this.uploaderId = uploaderId;
     }
 
-    public static File createProfileImage(String filePath, Long uploaderId) {
-        return new File(filePath, FileCategory.PROFILE_IMAGE, uploaderId);
-    }
-
-    public static File createPostAttachment(String filePath, Long uploaderId) {
-        return new File(filePath, FileCategory.POST_ATTACHMENT, uploaderId);
+    public static File createImage(String filePath, FileCategory category, Long uploaderId) {
+        return new File(filePath, category, uploaderId);
     }
 }

@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, java.lang.Long> {
     public List<Comment> findAllByPost(Post post);
 
     public Optional<Comment> findByIdAndPost(long commentId, Post post);
 
     public Long countByPost(Post post);
+
+    public List<Comment> findAllByIsDeletedFalseAndPost(Post post);
 }

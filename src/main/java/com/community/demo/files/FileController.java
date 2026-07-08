@@ -18,10 +18,9 @@ public class FileController {
 
     @PostMapping("/users/me/profile-image")
     public ResponseEntity<ApiResponse<FileUploadResponseDto>> uploadProfileImage(
-            @Login Long userId,
             @RequestPart("profileImage") MultipartFile file
     ) throws FileUploadException {
-        File savedFile = fileService.uploadProfileImage(file, userId);
+        File savedFile = fileService.uploadProfileImage(file, 0L);
 
         return ResponseEntity
                 .created(null)

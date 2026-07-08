@@ -5,6 +5,7 @@ import com.community.demo.posts.entity.PostMetadata;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class ReadPostResponseDto {
     private String title;
     private String userNickname;
     private String userProfileImageUrl;
-    private LocalDateTime postedTime;
+    private String postedTime;
     private String content;
     private String imageUrl;
     private Long likes;
@@ -28,7 +29,7 @@ public class ReadPostResponseDto {
                 post.getTitle(),
                 post.getAuthor().getNickname(),
                 post.getAuthor().getProfileImage().getFilePath(),
-                postMetadata.getPostedTime(),
+                postMetadata.getPostedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 post.getContent(),
                 post.getPostAttachment().getFilePath(),
                 postMetadata.getLikes(),

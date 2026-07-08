@@ -3,6 +3,7 @@ package com.community.demo.files;
 import com.community.demo.exception.BusinessException;
 import com.community.demo.exception.InvalidFileException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import static com.community.demo.files.File.createProfileImage;
+import static com.community.demo.files.File.createImage;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,23 +31,23 @@ public class FileService {
     private final FileRepository fileRepository;
 
     private static final Path PROJECT_ROOT = Paths.get(System.getProperty("user.dir"));
-    private static final Path PROFILE_DIR = PROJECT_ROOT.resolve("uploads/profile");
-    private static final Path POST_ATTACHMENT_DIR = PROJECT_ROOT.resolve("uploads/attachment");
-    private static final String PROFILE_URL = "/public/profile/";
-    private static final String POST_ATTACHMENT_URL = "/public/attachment/";
     private static final List<String> ALLOWED_EXTENSIONS = List.of("jpg", "jpeg", "png", "gif");
 
     public File uploadProfileImage(MultipartFile file, Long userId) throws FileUploadException {
-        return uploadFile(file, userId, PROFILE_DIR, PROFILE_URL);
+        return uploadFile(file, userId, FileCategory.PROFILE_IMAGE);
     }
 
     public File uploadPostAttachment(MultipartFile file, Long userId) throws FileUploadException {
-        return uploadFile(file, userId, POST_ATTACHMENT_DIR, POST_ATTACHMENT_URL);
+        return uploadFile(file, userId, FileCategory.POST_ATTACHMENT);
     }
 
-    private File uploadFile(MultipartFile file, Long userId, Path path, String url) throws FileUploadException {
+    private File uploadFile(MultipartFile file, Long userId, FileCategory category) throws FileUploadException {
+        //log.info(category.getDir());
+        Path path = PROJECT_ROOT.resolve(category.getDir());
+        //log.info(path.toString());
+
         String extension = extractAndValidateExtension(file);
-        String fileName = generateFileName("profile", extension);
+        String fileName = generateFileName(category.getDisplayName(), extension);
         Path savePath = path.resolve(fileName);
 
         try {
@@ -57,9 +59,9 @@ public class FileService {
             throw new BusinessException("internal_server_error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        String dbFilePath = url + fileName;
+        String dbFilePath = category.getUrl() + fileName;
 
-        return fileRepository.save(createProfileImage(dbFilePath, userId));
+        return fileRepository.save(createImage(dbFilePath, category, userId));
     }
 
     private String extractAndValidateExtension(MultipartFile file) {

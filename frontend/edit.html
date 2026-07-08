@@ -5,12 +5,41 @@
     <head>
         <meta charset="UTF-8">
         <title>edit post</title>
+        <script src="auth.js"></script>
+        <script src="header.js" defer></script>
+        <script src="edit.js" defer></script>
+        <script src="attach.js" defer></script>
         <link href="basic.css" rel="stylesheet">
-        <script src="edit.js"></script>
-        <script src="files.js"></script>
     </head>
     <body>
+        <div class="board-header">
+            <div>
+                <a id="go-back">
+                    <h1>
+                        &lt;
+                    </h1>
+                </a>
+            </div>
+            <div>
+                <h1>
+                    아무 말 대잔치
+                </h1>
+            </div>
+            <div>
+                <button id="menu-button">
+                    <img id="user-profile" class="user-profile-small">
+                </button>
+                
+                <div id="dropdown-menu" class="dropdown-menu hidden">
+                    <a href="user.html">회원정보수정</a>
+                    <a href="password.html">비밀번호수정</a>
+                    <button id="logout">로그아웃</button>
+                </div>
+            </div>
+        </div>
+        
         <article>
+            <div>
             <header>
                 <h1>게시글 수정</h1>
             </header>
@@ -18,7 +47,7 @@
             <form id="edit-form">
                 <div>
                     <label>제목*</label>
-                    <input type="text" name="title" id="title"/>
+                    <input type="text" maxlength=26 name="title" id="title"/>
                 </div>
                 <div>
                     <label>내용*</label>
@@ -26,7 +55,7 @@
                     <small>* helper text</small>
                 </div>
                 <div>
-                    <input type="hidden" name="imageUrl" id="imageUrl"/>
+                    <input name="imageUrl" id="imageUrl"/>
                 </div>
             </form>
 
@@ -41,6 +70,7 @@
                 <div>
                     <button type="submit" form="edit-form" value="수정하기"></button>
                 </div>                  
+            </div>
             </div>
         </article>
     </body>

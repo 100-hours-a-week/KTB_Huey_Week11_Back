@@ -1,11 +1,12 @@
 package com.community.demo.comments.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 public class UpdateCommentRequestDto {
 
-    private final String content;
+    private String content;
 }

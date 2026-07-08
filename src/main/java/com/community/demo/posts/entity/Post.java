@@ -11,11 +11,12 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "post")
 public class Post {
 
     @Id @GeneratedValue
     @Column(name = "post_id")
-    private Long id;
+    private java.lang.Long id;
 
     private String title;
 

@@ -13,6 +13,7 @@ import com.community.demo.posts.entity.PostMetadata;
 import com.community.demo.users.User;
 import com.community.demo.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -37,36 +40,33 @@ public class PostService {
     @Transactional
     public PostResponseDto createPost(Long userId, PostRequestDto request) {
         File postAttachment = resolvePostAttachment(request.getImageUrl());
-        User author = userRepository.findById(userId).orElseThrow();
+        log.info(postAttachment.getFilePath());
+        User author = getUser(userId);
         Post post = new Post(request.getTitle(), author, request.getContent(), postAttachment);
         Post savedPost = postRepository.save(post);
+        PostMetadata postMetadata = new PostMetadata(savedPost);
+        postMetadataRepository.save(postMetadata);
         return PostResponseDto.fromEntity(savedPost);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ReadPostResponseDto readPost(Long postId) {
 
         Post post = getPost(postId);
-        PostMetadata postMetadata = getPostMetadata(post);
+        PostMetadata postMetadata = getPostMetadata(postId);
 
         postMetadata.view();
-        Long count = commentRepository.countByPost(post);
+        java.lang.Long count = commentRepository.countByPost(post);
         return ReadPostResponseDto.fromEntity(post, postMetadata, count);
     }
 
     @Transactional(readOnly = true)
     public ReadPostsByPageResponseDto readPostsByPage(Long page) {
         PageRequest pageRequest = PageRequest.of(page.intValue(), 10, Sort.by("postedTime").descending());
-        Page<Post> posts = postRepository.findAll(pageRequest);
+        Page<PostMetadata> validPostMetadata = postMetadataRepository.findByIsDeletedFalse(pageRequest);
+        List<PostDto> postList = validPostMetadata.map(p -> PostDto.fromEntity(p.getPost(), p, commentRepository.countByPost(p.getPost()))).toList();
 
-        return new ReadPostsByPageResponseDto(posts.hasNext(), posts.map(
-                k -> PostDto.fromEntity(
-                        k,
-                        postMetadataRepository.findById(k).orElseThrow(),
-                        commentRepository.countByPost(k)
-                )
-            ).toList()
-        );
+        return new ReadPostsByPageResponseDto(validPostMetadata.hasNext(), postList);
     }
 
     @Transactional
@@ -78,7 +78,7 @@ public class PostService {
     @Transactional
     public void likePost(Long postId) {
         Post post = getPost(postId);
-        PostMetadata postMetadata = getPostMetadata(post);
+        PostMetadata postMetadata = getPostMetadata(postId);
 
         postMetadata.like();
 
@@ -94,19 +94,23 @@ public class PostService {
     @Transactional
     public void reportPost(Long postId) {
         Post post = getPost(postId);
-        PostMetadata postMetadata = getPostMetadata(post);
+        PostMetadata postMetadata = getPostMetadata(postId);
 
         postMetadata.report();
 
         postMetadataRepository.save(postMetadata);
     }
 
-    private Post getPost(Long postId) {
+    private User getUser(java.lang.Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user_not_found"));
+    }
+
+    private Post getPost(java.lang.Long postId) {
         return postRepository.findById(postId).orElseThrow(() -> new NotFoundException("post_not_found"));
     }
 
-    private PostMetadata getPostMetadata(Post post) {
-        return postMetadataRepository.findById(post)
+    private PostMetadata getPostMetadata(Long postId) {
+        return postMetadataRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException("internal_server_error", HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -115,24 +119,28 @@ public class PostService {
         post.update(request.getTitle(), request.getContent());
         applyPostAttachment(post, request.getImageUrl());
 
-        PostMetadata postMetadata = getPostMetadata(post);
+        PostMetadata postMetadata = getPostMetadata(post.getId());
         postMetadata.update();
         postRepository.save(post);
     }
 
     @AuthorizedOnly
     private void deletePost(Post post) {
-        PostMetadata postMetadata = getPostMetadata(post);
+        PostMetadata postMetadata = getPostMetadata(post.getId());
         postMetadata.delete();
         postMetadataRepository.save(postMetadata);
     }
 
     private File resolvePostAttachment(String postAttachmentUrl) {
+        log.info("resolvePostAttachment 진입: " + postAttachmentUrl);
         if (postAttachmentUrl == null || postAttachmentUrl.isBlank()) {
+            log.info("null");
             return null;
         }
 
+        log.info("not null");
         String relativePath = extractPathFromUrl(postAttachmentUrl);
+        log.info("relativePath: " + relativePath);
 
         return fileRepository.findByFilePath(relativePath)
                 .orElseThrow(() -> new NotFoundException("post_attachment_not_found"));

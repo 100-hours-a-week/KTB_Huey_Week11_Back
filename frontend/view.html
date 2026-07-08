@@ -5,34 +5,64 @@
     <head>
         <meta charset="UTF-8">
         <title>post</title>
-        <link href="view.css" rel="stylesheet">
-        <link href="basic.css" rel="stylesheet">
+        <script src="auth.js"></script>
+        <script src="header.js" defer></script>
         <script src="view.js" defer></script>
+        <link href="basic.css" rel="stylesheet">
+        <link href="view.css" rel="stylesheet">
+        <link href="modal.css" rel="stylesheet">
     </head>
     <body>
+
+        <div class="board-header">
+            <div>
+                <a href="index.html">
+                    <h1>
+                        &lt;
+                    </h1>
+                </a>
+            </div>
+            <div>
+                <h1>
+                    아무 말 대잔치
+                </h1>
+            </div>
+            <div>
+                <button id="menu-button">
+                    <img id="user-profile" class="user-profile-small">
+                </button>
+                
+                <div id="dropdown-menu" class="dropdown-menu hidden">
+                    <a href="user.html">회원정보수정</a>
+                    <a href="password.html">비밀번호수정</a>
+                    <button id="logout">로그아웃</button>
+                </div>
+            </div>
+        </div>
+
         <article>
             <div>
                 <div>
                     <header>
-                        <h1>
+                        <h1 id="title">
                             제목 1
                         </h1>
-                        <div class="vert">
+                        <div class="vert between">
                             <div class="vert">
-                                <img>
-                                <p class="author">더미 작성자 1</p>
-                                <time>2021-01-01 00:00:00</time>
+                                <img id="author-profile-image" class="user-profile-small">
+                                <p id="author" class="author">더미 작성자 1</p>
+                                <time id="posted-time">2021-01-01 00:00:00</time>
                             </div>
                             <div class="vert">
-                                <button>수정</button>
-                                <button>삭제</button>
+                                <a id="edit-post" href="edit.html">수정</a>
+                                <button id="post-delete">삭제</button>
                             </div>
                         </div>
                     </header>
                 </div>
                 <div>
-                    <img>
-                    <p>
+                    <img id="image">
+                    <p id="content">
                         무엇을 얘기할까요? ...
                     </p>
                 </div>
@@ -41,63 +71,88 @@
                         <div class="vert center">
                             <div>
                                 <button class="stat" id="like">
-                                    123
+                                    <p id="likes">123</p>
                                     <br>
-                                    좋아요 수
+                                    좋아요수
                                 </button>
                             </div>
                             <div>
                                 <p class="stat">
-                                    123
+                                    <p id="views">123</p>
                                     <br>
                                     조회수
                                 </p>
                             </div>
                             <div>
                                 <p class="stat">
-                                    123
+                                    <p id="comments">123</p>
                                     <br>
                                     댓글
                                 </p>
                             </div>
                         </div>
                     </footer>
-                    </div>
-
-
-
+                </div>
             </div>
             <section>
                 <form id="comment-form">
                     <div>
-                        <input type="text" placeholder="댓글을 남겨주세요!"/>
+                        <input type="text" id="comment-content" name="content" placeholder="댓글을 남겨주세요!"/>
                     </div>
                     <div>
                         <div>
-                            <input type="submit" value="댓글 등록"/>
+                            <input type="submit" disabled id="comment-submit" value="댓글 등록"/>
                         </div>
                     </div>
                 </form>
-                <article>
+                <form id="comment-update-form" class="hidden">
                     <div>
-                    <header class="vert">
-                        <div class="vert">
-                            <img>
-                            <p class="author">더미 작성자 1</p>
-                            <time>2021-01-01 00:00:00</time>
+                        <input type="text" id="update-comment-content" name="content" />
+                    </div>
+                    <div>
+                        <div>
+                            <input type="submit" value="댓글 수정"/>
                         </div>
-                        <div class="vert">
-                            <button>수정</button>
-                            <button>삭제</button>
-                        </div>
-                    </header>
+                    </div>
+                </form>
+                <div id="comment-list">
+
+                </div>
+            </section>
+
+            <div id="post-delete-modal" class="modal hidden">
+                <div class="modal-content">
+                    <strong>
+                        게시글을 삭제하시겠습니까?
+                    </strong>
 
                     <p>
-                        댓글 내용
+                        삭제한 내용은 복구 할 수 없습니다.
                     </p>
+
+                    <div class="vert">
+                        <button id="post-delete-modal-cancel">취소</button>
+                        <button id="delete-post">확인</button>
                     </div>
-                </article>
-            </section>
+                </div>
+            </div>
+
+            <div id="comment-delete-modal" class="modal hidden">
+                <div class="modal-content">
+                    <strong>
+                        댓글을 삭제하시겠습니까?
+                    </strong>
+
+                    <p>
+                        삭제한 내용은 복구 할 수 없습니다.
+                    </p>
+
+                    <div class="vert">
+                        <button id="comment-delete-modal-cancel">취소</button>
+                        <button id="delete-comment">확인</button>
+                    </div>
+                </div>
+            </div>
         </article>
     </body>
 </html>
