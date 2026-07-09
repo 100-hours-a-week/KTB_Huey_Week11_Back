@@ -4,6 +4,7 @@ import com.community.demo.auth.temp.Auth;
 import com.community.demo.auth.temp.dto.LoginRequestDto;
 import com.community.demo.auth.temp.dto.LoginResponseDto;
 import com.community.demo.exception.BadRequestException;
+import com.community.demo.exception.BusinessException;
 import com.community.demo.exception.NotFoundException;
 import com.community.demo.files.File;
 import com.community.demo.files.FileRepository;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,5 +139,17 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("profile_image_not_found"));
 
         user.updateProfileImage(newProfileImage);
+    }
+
+    public void isValidEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new BusinessException("email_duplicate", HttpStatus.CONFLICT);
+        }
+    }
+
+    public void isValidNickname(String nickname) {
+        if (userRepository.existsByNickname(nickname)) {
+            throw new BusinessException("nickname_duplicate", HttpStatus.CONFLICT);
+        }
     }
 }

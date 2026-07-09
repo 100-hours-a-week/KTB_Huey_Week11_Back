@@ -38,7 +38,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/users",
                         "/users/login",
                         "/users/me/profile-image",
-                        "/public/**"
+                        "/public/**",
+                        "/users/dup/**"
                 )
                 .excludeHttpMethods(HttpMethod.OPTIONS);
     }

@@ -39,7 +39,7 @@
             <form id="profile-image">
                 <div>
                     <label>프로필 사진</label>
-                    <small id="helper-text-profile-image">* helper text</small>
+                    <small id="helper-text-profile-image" class="helper"></small>
                 </div>
 
                 <div>
@@ -55,29 +55,29 @@
                 <div>
                     <label>이메일*</label>
                     <input type="text" name="email" id="email" placeholder="이메일을 입력하세요"/>
-                    <small id="helper-text-email">* helper text</small>
+                    <small id="helper-text-email" class="helper"></small>
                 </div>
                 <div>
                     <label>비밀번호*</label>
-                    <input type="text" name="password" id="password" placeholder="비밀번호를 입력하세요"/>
-                    <small id="helper-text-password">* helper text</small>
+                    <input type="password" name="password" id="password" placeholder="비밀번호를 입력하세요"/>
+                    <small id="helper-text-password" class="helper"></small>
                 </div>
                 <div>
                     <label>비밀번호 확인*</label>
-                    <input type="text" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요"/>
-                    <small id="helper-text-password-confirm">* helper text</small>
+                    <input type="password" id="password-confirm" placeholder="비밀번호를 한번 더 입력하세요"/>
+                    <small id="helper-text-password-confirm" class="helper"></small>
                 </div>
                 <div>
                     <label>닉네임*</label>
                     <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력하세요"/>
-                    <small id="helper-text-nickname">* helper text</small>
+                    <small id="helper-text-nickname" class="helper"></small>
                 </div>
                 <div>
                     <input name="profileImageUrl" id="imageUrl" />
                 </div>
                 <div>
                     <div>
-                        <input type="submit" value="회원가입" />
+                        <input type="submit" id="signup-submit" disabled value="회원가입" />
                     </div>
                 </div>
             </form>

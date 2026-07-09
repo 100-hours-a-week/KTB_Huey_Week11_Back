@@ -13,11 +13,41 @@ function parseImageUrl(url) {
     return "http://localhost:8080" + url;
 }
 
+async function validateNickname() {
+    const nickname = document.getElementById("nickname");
+    const nicknameHelperText = document.getElementById("helper-text-nickname");
+
+    if (nickname.value === "") {
+        nicknameHelperText.value = "*닉네임을 입력해주세요.";
+        return false;
+    } else if (nickname.value.length > 10) {
+        nicknameHelperText.value = "*닉네임은 최대 10자 까지 작성 가능합니다.";
+        return false;
+    }
+
+    const response = await fetch("http://localhost:8080/users/dup/nickname", {
+        method: "GET",
+        credentials: "include",
+    });
+
+    if (response.ok) {
+        nicknameHelperText.textContent = "";
+        return true;
+    } else if (response.status === 409) {
+        nicknameHelperText.textContent = "중복된 닉네임 입니다.";
+    }
+}
+
 //회원 정보 수정
 
 const userForm = document.getElementById("user-form");
 userForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (!validateNickname()) {
+        return;   
+    }
+
     const formData = new FormData(userForm);
     
     const response = await fetch("http://localhost:8080/users/me", {

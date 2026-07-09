@@ -82,3 +82,7 @@ time {
 .hidden {
     visibility: hidden;
 }
+
+.helper {
+    color: red;
+}

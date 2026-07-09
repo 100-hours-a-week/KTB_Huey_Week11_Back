@@ -1,28 +1,56 @@
-let email = document.getElementById("email");
-email.addEventListener("blur", async (event) => {
-    document.getElementById("helper-text-email").textContent = validateEmail(email.value);
+const validations = {
+    email: false,
+    password: false
+};
+
+function validate() {
+    const validation = validations.email && validations.password;
+    const submit = document.getElementById("login-submit");
+    if (validation) {
+        submit.disabled = false;
+    } else {
+        submit.disabled = true;
+    }
+};
+
+//이메일 유효성 검사
+const email = document.getElementById("email");
+email.addEventListener("focusout", async (event) => {
+    document.getElementById("helper-text-email").textContent = await validateEmail(email.value);
+    validate();
 });
 
-function validateEmail(input) {
+async function validateEmail(input) {
+    const emailRegex = /^\D+@\D+\.\D+$/;
+    validations.email = false;
+
     if (input === "") {
         return "*이메일을 입력해주세요.";
-    } else if ("") {
+    } else if (!emailRegex.test(input)) {
         return "*올바른 이메일 주소 형식을 입력해주세요. (예: example@example.com)";
-    } else if ("") {
-        return "*중복된 이메일입니다.";
     } else {
+        validations.email = true;
         return "";
     }
 }
 
+//비밀번호 유효성 검사
 const password = document.getElementById("password");
-password.addEventListener("blur", async (event) => {
-    document.getElementById("helper-text-password").textContent = validatePassword(password.value);
+
+password.addEventListener("focusout", async (event) => {
+    const passwordHelperText = document.getElementById("helper-text-password");
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,20}$/;
+    validations.password = false;
+
+    if (password.value === "") {
+        passwordHelperText.textContent = "*비밀번호를 입력해주세요.";
+    } else if (!passwordRegex.test(password.value)) {
+        passwordHelperText.textContent = "*비밀번호는 8자 이상, 20자 이하이며, 대문자, 소문자, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.";
+    } else {
+        validations.password = true;
+        validate();
+    }
 });
-
-function validatePassword(input) {
-
-}
 
 //로그인
 const loginForm = document.getElementById("login-form");
@@ -47,6 +75,7 @@ loginForm.addEventListener("submit", async (event) => {
         localStorage.setItem("user_profileImageUrl", "http://localhost:8080" + data.profileImage);
         window.location = "index.html";
     } else {
-
+        const passwordHelperText = document.getElementById("helper-text-password");
+        passwordHelperText.textContent = "*아이디 또는 비밀번호를 확인해주세요.";
     }
 });

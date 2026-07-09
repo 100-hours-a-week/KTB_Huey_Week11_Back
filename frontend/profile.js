@@ -4,9 +4,9 @@ let input = document.getElementById("image");
 input.style.opacity = 0;
 let imageUrl = document.getElementById("imageUrl");
 imageUrl.style.opacity = 0;
-let profileImage = document.getElementById("profile-image");
-profileImage.addEventListener("change", async (event) => {
-    const formData = new FormData(profileImage);
+let profileImageForm = document.getElementById("profile-image");
+profileImageForm.addEventListener("change", async (event) => {
+    const formData = new FormData(profileImageForm);
 
     const response = await fetch("http://localhost:8080/users/me/profile-image", {
         method: "POST",

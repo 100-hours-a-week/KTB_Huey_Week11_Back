@@ -59,4 +59,22 @@ public class UserController {
                 .ok()
                 .body(ApiResponse.of("user_delete_success", null));
     }
+
+    @GetMapping("/dup/email")
+    public ResponseEntity<ApiResponse<Void>> isValidEmail(EmailValidationRequestDto dto) {
+        userService.isValidEmail(dto.getEmail());
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("email_valid", null));
+    }
+
+    @GetMapping("dup/nickname")
+    public ResponseEntity<ApiResponse<Void>> isValidNickname(NicknameValidationRequestDto dto) {
+        userService.isValidNickname(dto.getNickname());
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("nickname_valid", null));
+    }
 }
