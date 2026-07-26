@@ -23,14 +23,34 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testCompileOnly 'org.projectlombok:lombok'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation(platform("org.junit:junit-bom:6.0.3"))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
 	implementation 'org.springframework.boot:spring-boot-h2console'
 	runtimeOnly 'com.h2database:h2'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+configurations {
+	mockitoAgent
+}
+dependencies {
+	testImplementation(libs.mockito)
+	mockitoAgent(libs.mockito) {
+		transitive = false
+	}
+}
+tasks {
+	test {
+		jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+	}
 }

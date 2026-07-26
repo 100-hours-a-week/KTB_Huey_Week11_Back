@@ -1,4 +1,4 @@
-package com.community.demo.auth;
+package com.community.demo.auth.temp;
 
 import com.community.demo.exception.NotFoundException;
 import com.community.demo.exception.UnauthorizedException;

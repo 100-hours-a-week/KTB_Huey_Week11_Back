@@ -1,16 +1,12 @@
 package com.community.demo.auth;
 
+import com.community.demo.auth.temp.AuthenticationInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.file.Paths;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,6 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations(uploadPath);
     }
 
+    /**
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
@@ -57,4 +54,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("Content-Type")
                 .allowCredentials(true);
     }
+    **/
 }

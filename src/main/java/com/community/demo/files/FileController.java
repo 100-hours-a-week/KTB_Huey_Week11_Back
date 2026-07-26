@@ -1,7 +1,7 @@
 package com.community.demo.files;
 
 import com.community.demo.ApiResponse;
-import com.community.demo.auth.Login;
+import com.community.demo.auth.temp.Login;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.ResponseEntity;

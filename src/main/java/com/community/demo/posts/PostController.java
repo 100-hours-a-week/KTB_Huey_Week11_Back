@@ -1,11 +1,13 @@
 package com.community.demo.posts;
 
 import com.community.demo.ApiResponse;
-import com.community.demo.auth.Login;
+import com.community.demo.auth.security.SecurityUtils;
+import com.community.demo.auth.temp.Login;
 import com.community.demo.posts.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,10 +22,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(@Login Long userId, PostRequestDto request) throws URISyntaxException {
-        log.info("PostController");
-        log.info("userId: " + userId);
-        log.info("imageUrl: " + request.getImageUrl());
+    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(Authentication authentication, PostRequestDto request) throws URISyntaxException {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
         PostResponseDto response = postService.createPost(userId, request);
 
         return ResponseEntity

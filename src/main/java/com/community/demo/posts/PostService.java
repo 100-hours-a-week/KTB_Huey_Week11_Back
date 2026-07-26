@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +71,7 @@ public class PostService {
         return new ReadPostsByPageResponseDto(validPostMetadata.hasNext(), postList);
     }
 
+    @PreAuthorize("@postRepository.findById(#postId).get().getAuthor().getEmail() == authentication.principal.username")
     @Transactional
     public void updatePost(Long postId, UpdatePostRequestDto request) {
         Post post = getPost(postId);
@@ -85,6 +88,7 @@ public class PostService {
         postMetadataRepository.save(postMetadata);
     }
 
+    @PreAuthorize("@postRepository.findById(#postId).get().getAuthor().getEmail() == authentication.principal.username")
     @Transactional
     public void deletePost(Long postId) {
         Post post = getPost(postId);
@@ -114,7 +118,6 @@ public class PostService {
                 .orElseThrow(() -> new BusinessException("internal_server_error", HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @AuthorizedOnly
     private void updatePost(Post post, UpdatePostRequestDto request) {
         post.update(request.getTitle(), request.getContent());
         applyPostAttachment(post, request.getImageUrl());
@@ -124,7 +127,6 @@ public class PostService {
         postRepository.save(post);
     }
 
-    @AuthorizedOnly
     private void deletePost(Post post) {
         PostMetadata postMetadata = getPostMetadata(post.getId());
         postMetadata.delete();

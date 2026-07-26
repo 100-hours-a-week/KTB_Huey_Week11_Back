@@ -9,6 +9,7 @@ import com.community.demo.users.User;
 import com.community.demo.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class CommentService {
         return comments.stream().map(ReadCommentResponseDto::fromEntity).toList();
     }
 
+    @PreAuthorize("@commentRepository.findById(#commentId).get().getAuthor().getEmail() == authentication.principal.username")
     @Transactional
     public UpdateCommentResponseDto updateComment(Long commentId, UpdateCommentRequestDto request) {
         Comment comment = getComment(commentId);
@@ -50,25 +52,24 @@ public class CommentService {
         return CommentResponseDto.fromEntity(comment);
     }
 
+    @PreAuthorize("@commentRepository.findById(#commentId).get().getAuthor().getEmail() == authentication.principal.username")
     @Transactional
-    public void deleteComment(java.lang.Long commentId) {
+    public void deleteComment(Long commentId) {
         Comment comment = getComment(commentId);
 
         deleteComment(comment);
     }
 
-    private Comment getComment(java.lang.Long commentId) {
+    private Comment getComment(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("comment_not_found"));
     }
 
-    @AuthorizedOnly
     private Comment updateComment(Comment comment, UpdateCommentRequestDto request) {
         log.info(request.getContent());
         comment.modify(request.getContent());
         return commentRepository.save(comment);
     }
 
-    @AuthorizedOnly
     private void deleteComment(Comment comment) {
         comment.delete();
         commentRepository.save(comment);

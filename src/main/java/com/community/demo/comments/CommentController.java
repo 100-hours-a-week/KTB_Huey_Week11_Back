@@ -1,11 +1,13 @@
 package com.community.demo.comments;
 
 import com.community.demo.ApiResponse;
-import com.community.demo.auth.Login;
+import com.community.demo.auth.security.SecurityUtils;
+import com.community.demo.auth.temp.Login;
 import com.community.demo.comments.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long postId, @Login Long userId, CommentRequestDto request) {
-
+    public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long postId, Authentication authentication, CommentRequestDto request) {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
         CommentResponseDto response = commentService.createComment(postId, userId, request);
 
         return ResponseEntity

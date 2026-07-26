@@ -1,6 +1,5 @@
-package com.community.demo.auth;
+package com.community.demo.auth.temp;
 
-import com.community.demo.exception.BadRequestException;
 import com.community.demo.exception.UnauthorizedException;
 import com.community.demo.users.UserService;
 import jakarta.servlet.http.HttpServletRequest;
