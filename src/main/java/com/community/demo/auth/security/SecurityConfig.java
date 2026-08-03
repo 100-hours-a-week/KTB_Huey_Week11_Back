@@ -80,7 +80,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:5173", "http://127.0.0.1:5173"));
+        configuration.setAllowedOrigins(List.of(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://ktb-project-network:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PATCH", "PUT", "DELETE", "HEAD"));
         configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
