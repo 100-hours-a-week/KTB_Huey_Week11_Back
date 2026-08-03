@@ -85,7 +85,7 @@ public class SecurityConfig {
                 "http://localhost:5500",
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
-                "http://ktb-project-network:5173"));
+                "http://ktb-project-network:80"));
         configuration.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PATCH", "PUT", "DELETE", "HEAD"));
         configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
