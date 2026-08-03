@@ -56,6 +56,7 @@ public class FileService {
             }
             file.transferTo(savePath.toFile());
         } catch (IOException exception) {
+            log.info("internal server error during file upload, because of IOException");
             throw new BusinessException("internal_server_error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
