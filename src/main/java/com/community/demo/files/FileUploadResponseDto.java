@@ -16,6 +16,6 @@ public class FileUploadResponseDto {
     public static FileUploadResponseDto from(File file) {
         String fullUrl = FileUtil.toFullUrl(file.getFilePath());
 
-        return of(fullUrl);
+        return of(file.getFilePath());
     }
 }
