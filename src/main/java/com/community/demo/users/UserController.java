@@ -83,7 +83,7 @@ public class UserController {
                 .body(ApiResponse.of("nickname_valid", null));
     }
 
-    @GetMapping("/me/dup/email")
+    @GetMapping("/me/dup/nickname")
     public ResponseEntity<ApiResponse<Void>> isValidNicknameForUpdate(Authentication authentication, NicknameValidationForUpdateRequestDto dto) {
         Long userId = SecurityUtils.resolveAuthentication(authentication);
         userService.isValidNicknameForUpdate(userId, dto.getNewNickname());
