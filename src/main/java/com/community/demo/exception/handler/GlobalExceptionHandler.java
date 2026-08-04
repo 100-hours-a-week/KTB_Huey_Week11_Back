@@ -18,13 +18,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ErrorResponseDto handleBusiness(BusinessException exception) {
-        return ErrorResponseDto.of(exception.getMessage());
+    public ResponseEntity<ErrorResponseDto> handleBusiness(BusinessException exception) {
+        return ResponseEntity
+                .status(exception.getStatus())
+                .body(ErrorResponseDto.of(exception.getMessage()));
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ErrorResponseDto handleForbidden(ForbiddenException exception) {
-        return ErrorResponseDto.of(exception.getMessage());
+    public ResponseEntity<ErrorResponseDto> handleForbidden(ForbiddenException exception) {
+        return ResponseEntity
+                .status(exception.getStatus())
+                .body(ErrorResponseDto.of(exception.getMessage()));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
