@@ -36,7 +36,8 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    public ResponseEntity<ApiResponse<Void>> updateUser(Long userId, UpdateUserRequestDto request) {
+    public ResponseEntity<ApiResponse<Void>> updateUser(Authentication authentication, UpdateUserRequestDto request) {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
         userService.updateUser(userId, request);
 
         return ResponseEntity
@@ -45,7 +46,8 @@ public class UserController {
     }
 
     @PatchMapping("/me/password")
-    public ResponseEntity<ApiResponse<Void>> updatePassword(Long userId, UpdatePasswordRequestDto request) {
+    public ResponseEntity<ApiResponse<Void>> updatePassword(Authentication authentication, UpdatePasswordRequestDto request) {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
         userService.updatePassword(userId, request);
 
         return ResponseEntity
@@ -54,7 +56,8 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(Long userId) {
+    public ResponseEntity<ApiResponse<Void>> deleteUser(Authentication authentication) {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
         userService.deleteUser(userId);
 
         return ResponseEntity
@@ -74,6 +77,16 @@ public class UserController {
     @GetMapping("/dup/nickname")
     public ResponseEntity<ApiResponse<Void>> isValidNickname(NicknameValidationRequestDto dto) {
         userService.isValidNickname(dto.getNickname());
+
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.of("nickname_valid", null));
+    }
+
+    @GetMapping("/me/dup/email")
+    public ResponseEntity<ApiResponse<Void>> isValidNicknameForUpdate(Authentication authentication, NicknameValidationForUpdateRequestDto dto) {
+        Long userId = SecurityUtils.resolveAuthentication(authentication);
+        userService.isValidNicknameForUpdate(userId, dto.getNewNickname());
 
         return ResponseEntity
                 .ok()

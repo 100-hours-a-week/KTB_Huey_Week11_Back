@@ -11,6 +11,7 @@ import com.community.demo.users.dto.UpdatePasswordRequestDto;
 import com.community.demo.users.dto.UpdateUserRequestDto;
 import com.community.demo.users.dto.UserRequestDto;
 import com.community.demo.users.dto.UserResponseDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -123,24 +124,33 @@ public class UserControllerTests {
         @Test
         @DisplayName("회원 정보를 수정하고 200 OK를 반환한다")
         void success() {
-            // given
-            UpdateUserRequestDto request =
-                    mock(UpdateUserRequestDto.class);
+            try (MockedStatic<SecurityUtils> securityUtils =
+                         mockStatic(SecurityUtils.class)) {
 
-            // when
-            ResponseEntity<ApiResponse<Void>> response =
-                    userController.updateUser(USER_ID, request);
+                securityUtils
+                        .when(() ->
+                                SecurityUtils.resolveAuthentication(authentication))
+                        .thenReturn(USER_ID);
 
-            // then
-            assertAll(
-                    () -> assertEquals(
-                            HttpStatus.OK,
-                            response.getStatusCode()
-                    ),
-                    () -> assertNotNull(response.getBody())
-            );
+                // given
+                UpdateUserRequestDto request =
+                        mock(UpdateUserRequestDto.class);
 
-            verify(userService).updateUser(USER_ID, request);
+                // when
+                ResponseEntity<ApiResponse<Void>> response =
+                        userController.updateUser(authentication, request);
+
+                // then
+                assertAll(
+                        () -> assertEquals(
+                                HttpStatus.OK,
+                                response.getStatusCode()
+                        ),
+                        () -> assertNotNull(response.getBody())
+                );
+
+                verify(userService).updateUser(USER_ID, request);
+            }
         }
     }
 
@@ -151,24 +161,33 @@ public class UserControllerTests {
         @Test
         @DisplayName("비밀번호를 수정하고 200 OK를 반환한다")
         void success() {
-            // given
-            UpdatePasswordRequestDto request =
-                    mock(UpdatePasswordRequestDto.class);
+            try (MockedStatic<SecurityUtils> securityUtils =
+                         mockStatic(SecurityUtils.class)) {
 
-            // when
-            ResponseEntity<ApiResponse<Void>> response =
-                    userController.updatePassword(USER_ID, request);
+                securityUtils
+                        .when(() ->
+                                SecurityUtils.resolveAuthentication(authentication))
+                        .thenReturn(USER_ID);
 
-            // then
-            assertAll(
-                    () -> assertEquals(
-                            HttpStatus.OK,
-                            response.getStatusCode()
-                    ),
-                    () -> assertNotNull(response.getBody())
-            );
+                // given
+                UpdatePasswordRequestDto request =
+                        mock(UpdatePasswordRequestDto.class);
 
-            verify(userService).updatePassword(USER_ID, request);
+                // when
+                ResponseEntity<ApiResponse<Void>> response =
+                        userController.updatePassword(authentication, request);
+
+                // then
+                assertAll(
+                        () -> assertEquals(
+                                HttpStatus.OK,
+                                response.getStatusCode()
+                        ),
+                        () -> assertNotNull(response.getBody())
+                );
+
+                verify(userService).updatePassword(USER_ID, request);
+            }
         }
     }
 
@@ -179,20 +198,29 @@ public class UserControllerTests {
         @Test
         @DisplayName("회원을 삭제하고 200 OK를 반환한다")
         void success() {
-            // when
-            ResponseEntity<ApiResponse<Void>> response =
-                    userController.deleteUser(USER_ID);
+            try (MockedStatic<SecurityUtils> securityUtils =
+                         mockStatic(SecurityUtils.class)) {
 
-            // then
-            assertAll(
-                    () -> assertEquals(
-                            HttpStatus.OK,
-                            response.getStatusCode()
-                    ),
-                    () -> assertNotNull(response.getBody())
-            );
+                securityUtils
+                        .when(() ->
+                                SecurityUtils.resolveAuthentication(authentication))
+                        .thenReturn(USER_ID);
 
-            verify(userService).deleteUser(USER_ID);
+                // when
+                ResponseEntity<ApiResponse<Void>> response =
+                        userController.deleteUser(authentication);
+
+                // then
+                assertAll(
+                        () -> assertEquals(
+                                HttpStatus.OK,
+                                response.getStatusCode()
+                        ),
+                        () -> assertNotNull(response.getBody())
+                );
+
+                verify(userService).deleteUser(USER_ID);
+            }
         }
     }
 

@@ -137,6 +137,13 @@ public class UserService {
         }
     }
 
+    public void isValidNicknameForUpdate(Long userId, String nickname) {
+        User user = findUser(userId);
+        if (!nickname.equals(user.getNickname()) && userRepository.existsByNickname(nickname)) {
+            throw new BusinessException("nickname_duplicate", HttpStatus.CONFLICT);
+        }
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user_not_found"));
     }
