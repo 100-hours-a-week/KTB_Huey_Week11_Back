@@ -25,6 +25,6 @@ public class AuthController {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         UserInfoDto userInfo = userService.getUser(user.getUsername());
         return ResponseEntity
-                .ok(ApiResponse.of("user_csrf_token_publish_success", CsrfDto.of(csrfToken, userInfo)));
+                .ok(ApiResponse.of("user_csrf_token_publish_success", CsrfDto.of(csrfToken)));
     }
 }

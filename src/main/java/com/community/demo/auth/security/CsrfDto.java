@@ -10,26 +10,17 @@ import org.springframework.security.web.csrf.CsrfToken;
 public class CsrfDto {
     private String name;
     private String token;
-    private Long userId;
-    private String email;
-    private String nickname;
-    private String profileImage;
 
-    public static CsrfDto of(CsrfToken token, UserInfoDto userInfoDto) {
+    public static CsrfDto of(CsrfToken token) {
         return new CsrfDto(
                 token.getHeaderName(),
-                token.getToken(),
-                userInfoDto.getUserId(),
-                userInfoDto.getEmail(),
-                userInfoDto.getNickname(),
-                userInfoDto.getProfileImage());
+                token.getToken());
     }
 
     public static CsrfDto ofAnonymous(CsrfToken token) {
         return new CsrfDto(
                 token.getHeaderName(),
-                token.getToken(),
-                null, null, null, null
+                token.getToken()
         );
     }
 }
