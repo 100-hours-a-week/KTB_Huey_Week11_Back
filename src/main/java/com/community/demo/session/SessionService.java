@@ -3,6 +3,7 @@ package com.community.demo.session;
 import com.community.demo.auth.security.CustomUserDetails;
 import com.community.demo.exception.NotFoundException;
 import com.community.demo.exception.UnauthorizedException;
+import com.community.demo.files.File;
 import com.community.demo.users.User;
 import com.community.demo.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,14 @@ public class SessionService {
                 () -> new NotFoundException("user_not_found")
         );
 
+        Optional<File> userProfileImage = Optional.ofNullable(user.getProfileImage());
+        String filePath = "null";
+        if (userProfileImage.isPresent()) {
+            filePath = userProfileImage.get().getFilePath();
+        }
+
         log.info("retreive profile image of userId: " + user.getId()
-                + ", filePath: " + Optional.ofNullable(user.getProfileImage().getFilePath()).orElse("null"));
+                + ", filePath: " + filePath);
 
         return UserInfoDto.from(user);
     }

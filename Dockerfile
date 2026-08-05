@@ -11,15 +11,14 @@ COPY build.gradle settings.gradle ./
 RUN chmod +x gradlew
 
 RUN --mount=type=cache,target=/root/.gradle \
-    ./gradlew dependencies --no-daemon
+    ./gradlew dependencies
 
 COPY src src
 
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew bootJar \
         -x test \
-        --build-cache \
-        --no-daemon
+        --build-cache
 
 
 FROM eclipse-temurin:21-jre-alpine

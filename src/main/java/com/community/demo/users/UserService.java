@@ -66,7 +66,6 @@ public class UserService {
         user.updateNickname(request.getNewNickname());
         log.info("apply new profile image from path: " + request.getNewProfileImageUrl());
         applyProfileImage(user, request.getNewProfileImageUrl());
-        userRepository.save(user);
     }
 
     @Transactional
@@ -74,7 +73,6 @@ public class UserService {
         User user = findUser(userId);
         String newPassword = passwordEncoder.encode(request.getNewPassword());
         user.updatePassword(newPassword);
-        userRepository.save(user);
     }
 
     public UserInfoDto getUser(String email) {
