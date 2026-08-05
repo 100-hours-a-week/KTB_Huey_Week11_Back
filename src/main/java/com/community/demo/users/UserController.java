@@ -16,16 +16,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/me")
-    public ResponseEntity<ApiResponse<ReadUserResponseDto>> readUser(Authentication authentication) {
-        Long userId = SecurityUtils.resolveAuthentication(authentication);
-        ReadUserResponseDto response = userService.readUser(userId);
-
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.of("user_read_success", response));
-    }
-
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> createUser(UserRequestDto request) {
         UserResponseDto response = userService.createUser(request);

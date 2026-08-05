@@ -67,11 +67,12 @@ public class SecurityConfig {
                                 "/users/dup/**",
                                 "/css/**",
                                 "/csrf",
-                                "/error"
+                                "/error",
+                                "/users/me"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS)
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .build();
     }

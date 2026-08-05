@@ -18,12 +18,7 @@ public class AuthController {
 
     @GetMapping("/csrf")
     public ResponseEntity<ApiResponse<CsrfDto>> requestCsrfToken(CsrfToken csrfToken, Authentication authentication) {
-        if (authentication == null) {
-            return ResponseEntity
-                    .ok(ApiResponse.of("anonymous_csrf_token_publish_success", CsrfDto.ofAnonymous(csrfToken)));
-        }
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        UserInfoDto userInfo = userService.getUser(user.getUsername());
         return ResponseEntity
                 .ok(ApiResponse.of("user_csrf_token_publish_success", CsrfDto.of(csrfToken)));
     }
