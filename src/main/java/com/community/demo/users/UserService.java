@@ -64,6 +64,7 @@ public class UserService {
     public void updateUser(Long userId, UpdateUserRequestDto request) {
         User user = findUser(userId);
         user.updateNickname(request.getNewNickname());
+        log.info("apply new profile image from path: " + request.getNewProfileImageUrl());
         applyProfileImage(user, request.getNewProfileImageUrl());
         userRepository.save(user);
     }
