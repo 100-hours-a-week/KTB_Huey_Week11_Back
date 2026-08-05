@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserRequestDto {
-    private String newNickname;
-    private String newProfileImageUrl;
+    private String nickname;
+    private String profileImageUrl;
 }

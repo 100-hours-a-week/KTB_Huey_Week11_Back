@@ -63,9 +63,9 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, UpdateUserRequestDto request) {
         User user = findUser(userId);
-        user.updateNickname(request.getNewNickname());
-        log.info("apply new profile image from path: " + request.getNewProfileImageUrl());
-        applyProfileImage(user, request.getNewProfileImageUrl());
+        user.updateNickname(request.getNickname());
+        log.info("apply new profile image from path: " + request.getProfileImageUrl());
+        applyProfileImage(user, request.getProfileImageUrl());
     }
 
     @Transactional
