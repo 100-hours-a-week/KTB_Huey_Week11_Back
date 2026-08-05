@@ -17,8 +17,7 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/csrf")
-    public ResponseEntity<ApiResponse<CsrfDto>> requestCsrfToken(CsrfToken csrfToken, Authentication authentication) {
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    public ResponseEntity<ApiResponse<CsrfDto>> requestCsrfToken(CsrfToken csrfToken) {
         return ResponseEntity
                 .ok(ApiResponse.of("user_csrf_token_publish_success", CsrfDto.of(csrfToken)));
     }
