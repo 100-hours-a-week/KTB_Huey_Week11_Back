@@ -117,6 +117,7 @@ try {
         --platform $Platform `
         --file $DockerfilePath `
         --tag $ImageUri `
+        --provenance=false `
         --push `
         $ProjectDirectory
 
@@ -130,7 +131,6 @@ try {
 catch {
     Write-Host ""
     Write-Host "실패: $($_.Exception.Message)" -ForegroundColor Red
-    exit 1
 }
 
 pause

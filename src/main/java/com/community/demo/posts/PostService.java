@@ -41,8 +41,9 @@ public class PostService {
 
     @Transactional
     public PostResponseDto createPost(Long userId, PostRequestDto request) {
+        log.info(request.getImageUrl());
         File postAttachment = resolvePostAttachment(request.getImageUrl());
-        log.info(postAttachment.getFilePath());
+        //log.info(postAttachment.getFilePath());
         User author = getUser(userId);
         Post post = new Post(request.getTitle(), author, request.getContent(), postAttachment);
         Post savedPost = postRepository.save(post);
