@@ -30,7 +30,7 @@ public class UserService {
     @Transactional
     public UserResponseDto createUser(UserRequestDto request) {
 
-        if (request.getEmail().isEmpty() || !request.getEmail().matches("^[A-Za-z._%+-]+@[A-Za-z.-]+\\.[A-Za-z]{2,}$")) {
+        if (request.getEmail().isEmpty() || !request.getEmail().matches("^\\w+@\\w+\\.\\w+$")) {
             throw new BusinessException("email validation failed", null);
         } else if (request.getPassword().isEmpty() || !request.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,20}$")) {
             throw new BusinessException("password validation failed", null);
