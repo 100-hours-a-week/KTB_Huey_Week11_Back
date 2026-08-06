@@ -2,9 +2,11 @@ package com.community.demo.posts.dto;
 
 import com.community.demo.posts.entity.Post;
 import com.community.demo.posts.entity.PostMetadata;
+import com.community.demo.time.TimestampUtils;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
@@ -29,7 +31,7 @@ public class ReadPostResponseDto {
                 post.getTitle(),
                 post.getAuthor().getNickname(),
                 post.getAuthor().getProfileImage().getFilePath(),
-                postMetadata.getPostedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                TimestampUtils.getZonedTime(postMetadata.getPostedTime()),
                 post.getContent(),
                 post.getPostAttachment().getFilePath(),
                 postMetadata.getLikes(),

@@ -1,6 +1,7 @@
 package com.community.demo.comments.dto;
 
 import com.community.demo.comments.Comment;
+import com.community.demo.time.TimestampUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +22,7 @@ public class CommentResponseDto {
                 comment.getId(),
                 comment.getAuthor().getNickname(),
                 comment.getAuthor().getProfileImage().getFilePath(),
-                comment.getPostedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                TimestampUtils.getZonedTime(comment.getPostedTime()),
                 comment.getContent());
     }
 }

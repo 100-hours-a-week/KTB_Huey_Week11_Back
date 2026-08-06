@@ -3,6 +3,7 @@ package com.community.demo.posts.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +17,7 @@ public class PostMetadata {
     @MapsId
     @JoinColumn(name = "post_id")
     private Post post;
-    private LocalDateTime postedTime;
+    private Instant postedTime;
     private long likes;
     private long views;
     private boolean isDeleted;
@@ -34,7 +35,7 @@ public class PostMetadata {
 
     public PostMetadata(Post post) {
         this.post = post;
-        this.postedTime = LocalDateTime.now();
+        this.postedTime = Instant.now();
         this.likes = 0L;
         this.views = 0L;
         this.isDeleted = false;

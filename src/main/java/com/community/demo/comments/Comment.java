@@ -5,6 +5,7 @@ import com.community.demo.users.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +23,7 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User author;
 
-    private LocalDateTime postedTime;
+    private Instant postedTime;
     private String content;
     private boolean isDeleted;
 
@@ -32,7 +33,7 @@ public class Comment {
     public Comment(Post post, User user, String content) {
         this.post = post;
         this.author = user;
-        this.postedTime = LocalDateTime.now();
+        this.postedTime = Instant.now();
         this.content = content;
         this.isDeleted = false;
         post.getComments().add(this);
