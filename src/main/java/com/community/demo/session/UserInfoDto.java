@@ -12,7 +12,7 @@ public class UserInfoDto {
     private String nickname;
     private String profileImageUrl;
 
-    public static UserInfoDto from(User user) {
-        return new UserInfoDto(user.getId(), user.getEmail(), user.getNickname(), user.getProfileImage().getFilePath());
+    public static UserInfoDto from(User user, String filePath) {
+        return new UserInfoDto(user.getId(), user.getEmail(), user.getNickname(), filePath);
     }
 }

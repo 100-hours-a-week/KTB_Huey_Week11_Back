@@ -43,7 +43,7 @@ public class SessionService {
         log.info("retreive profile image of userId: " + user.getId()
                 + ", filePath: " + filePath);
 
-        return UserInfoDto.from(user);
+        return UserInfoDto.from(user, filePath);
     }
 
 }
