@@ -2,6 +2,7 @@ package com.community.demo.posts.dto;
 
 import com.community.demo.posts.entity.Post;
 import com.community.demo.posts.entity.PostMetadata;
+import com.community.demo.time.TimestampUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class PostDto {
                 postMetadata.isBlinded(),
                 post.getId(),
                 post.getTitle(),
-                postMetadata.getPostedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                TimestampUtils.getZonedTime(postMetadata.getPostedTime()),
                 postMetadata.getLikes(),
                 count,
                 postMetadata.getViews(),
